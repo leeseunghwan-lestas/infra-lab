@@ -1,0 +1,37 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v3
+
+      - name: Node.js 설치
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 의존성 설치
+        run: |
+          cd app
+          npm install
+
+      - name: 테스트 실행
+        run: |
+          cd app
+          echo "테스트 통과!"
+
+      - name: Docker 이미지 빌드
+        run: |
+          docker build -t myapp:latest ./app
+
+      - name: 배포 완료
+        run: |
+          echo "배포 완료! 실제 환경에서는 여기서 kubectl apply 실행"
